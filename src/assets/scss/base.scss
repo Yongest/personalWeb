@@ -90,8 +90,15 @@ a{display:block;color:#646464;}
   html {
     font-size:35px;
   }
+ 
 }
-
+@media screen and (min-width: 800PX) {
+  
+ #app {
+   width: 1200px;
+   margin: 0 auto;
+ }
+}
 //CSS去除Input的边框样式和阴影
 /**
  *  修改google浏览器，默认的聚焦黄色背景为白色
@@ -115,4 +122,19 @@ input{
 
 
 
-
+body {
+  background-color: #f1ebe3;
+}
+.pd {
+  padding:.6rem;
+}
+  h1 {
+    font-size: .8rem;
+    text-align: center;
+    font-weight: bold;
+  }
+  li {
+    font-size: .6rem;
+    text-indent: 2em;
+    padding-top: .4rem;
+  }

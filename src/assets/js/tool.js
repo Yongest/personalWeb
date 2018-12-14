@@ -221,79 +221,21 @@ let app = {
         }, 1700);
     },
 
-    nobodySide: function (r, els) {
-        var r = r || '';
-        var els = els || 'body , html';
-        var nodeList = document.querySelectorAll(els);
-        if (!r) {
-            for (var i = 0; i < nodeList.length; i++) {
-                nodeList[i].setAttribute('class', 'NobodySide');
-            }
-        } else {
-            for (var i = 0; i < nodeList.length; i++) {
-                nodeList[i].classList.remove('NobodySide');
-            }
-        }
-
-    },
-    ajax: function (url, type, dataJson) {
-        return new Promise((resolve, reject) => {
-            //创建axios实例，把基本的配置放进去
-            var baseURl = this.apiDomain + '/baseapi/';
-
-
-            // 是否需要拦截code==-1的状态
-            let cancel;
-            let promiseArr = {};
-            const CancelToken = axios.CancelToken;
-            const timeout = 10000;
-            const instance = axios.create({
-                //定义请求文件类型
-                timeout: timeout,
-                //定义请求根目录
-                baseURL: baseURl,
-                transformResponse: [function (data) {
-                    // 对 data 进行任意转换处理
-                    data = data.data;
-                    return data;
-                }],
-                cancelToken: new CancelToken(function executor(c) {
-                    cancel = c;
-                }),
-
-            });
-
-
-            if (type.toLowerCase() === 'post') {
-                let data = [];
-                for (let key in dataJson) {
-                    data.push(key + '=' + dataJson[key]);
-                }
-                data = data.join("&");
-                return instance({
-                    url: url,
-                    method: type,
-                    data: data,
-
-                }).then(res => {
-                    resolve(JSON.parse(res.request.response));
-                }).catch(err => {
-                    reject(JSON.parse(err.request.response.msg));
-                });
-            } else {
-                return instance({
-                    url: url,
-                    method: type,
-                    params: dataJson,
-
-                }).then(res => {
-
-                    resolve(JSON.parse(res.request.response));
-                }).catch(err => {
-                    reject(JSON.parse(err.request.status));
-                });
-            }
-        });
+    domain:'http://mingyi.free.idcfengye.com',
+    get(obj){
+        axios.get(this.domain+obj.url, {
+            params: obj.data?obj.data:{},
+            // headers: {time: +new Date()}
+          })
+          .then(function (response) {
+            obj.over && obj.over()
+            obj.success && obj.success(response.data)
+            
+          })
+          .catch(function (error) {
+            obj.over && obj.over()
+            obj.fail && obj.fail(error)
+          });
     },
     
     //数组去重
